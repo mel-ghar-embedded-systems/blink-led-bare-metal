@@ -23,6 +23,6 @@ upload:
 	openocd -f board/st_nucleo_f4.cfg
 
 clean:
-	rm -f $(OBJS_DIR)* $(BINS_DIR)*
+	rm -f $(OBJS_DIR)* $(BINS_DIR)* $(DEBUG)*
 
 re: clean all
