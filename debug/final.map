@@ -1,0 +1,64 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x0000000008000000 0x0000000000080000 xr
+SRAM             0x0000000020000000 0x0000000000020000 rw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD ./objs/main.o
+LOAD ./objs/startup.o
+
+.text           0x0000000008000000       0x90
+ *(.isr_vector)
+ .isr_vector    0x0000000008000000        0x8 ./objs/startup.o
+                0x0000000008000000                vectors
+ *(.text)
+ .text          0x0000000008000008       0x88 ./objs/main.o
+                0x0000000008000008                blink
+ .text          0x0000000008000090        0x0 ./objs/startup.o
+OUTPUT(./bins/blink elf32-littlearm)
+LOAD linker stubs
+
+.data           0x0000000020000000        0x0
+ .data          0x0000000020000000        0x0 ./objs/main.o
+ .data          0x0000000020000000        0x0 ./objs/startup.o
+
+.igot.plt       0x0000000020000000        0x0
+ .igot.plt      0x0000000020000000        0x0 ./objs/startup.o
+
+.glue_7         0x0000000008000090        0x0
+ .glue_7        0x0000000008000090        0x0 linker stubs
+
+.glue_7t        0x0000000008000090        0x0
+ .glue_7t       0x0000000008000090        0x0 linker stubs
+
+.vfp11_veneer   0x0000000008000090        0x0
+ .vfp11_veneer  0x0000000008000090        0x0 linker stubs
+
+.v4_bx          0x0000000008000090        0x0
+ .v4_bx         0x0000000008000090        0x0 linker stubs
+
+.iplt           0x0000000008000090        0x0
+ .iplt          0x0000000008000090        0x0 ./objs/startup.o
+
+.rel.dyn        0x0000000008000090        0x0
+ .rel.iplt      0x0000000008000090        0x0 ./objs/startup.o
+
+.bss            0x0000000020000000        0x0
+ .bss           0x0000000020000000        0x0 ./objs/main.o
+ .bss           0x0000000020000000        0x0 ./objs/startup.o
+
+.comment        0x0000000000000000       0x1e
+ .comment       0x0000000000000000       0x1e ./objs/main.o
+                                         0x1f (size before relaxing)
+ .comment       0x000000000000001e       0x1f ./objs/startup.o
+
+.ARM.attributes
+                0x0000000000000000       0x2e
+ .ARM.attributes
+                0x0000000000000000       0x2e ./objs/main.o
+ .ARM.attributes
+                0x000000000000002e       0x2e ./objs/startup.o
